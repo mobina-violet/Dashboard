@@ -1,6 +1,6 @@
 # Dashboard Analytics
 
-![Dashboard Preview](./preview.png)
+![Dashboard Preview](http://localhost:5173/)
 
 Dashboard Analytics
 

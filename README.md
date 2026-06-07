@@ -1,6 +1,4 @@
-# Dashboard Analytics
-
-![Dashboard Preview](http://localhost:5173/)
+# Dashboard Analytics 💣📊
 
 Dashboard Analytics
 

@@ -14,10 +14,24 @@ const faqs = [
 function Help() {
   const { isDark } = useTheme();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [message, setMessage] = useState("");
+  const [sentMessage, setSentMessage] = useState("");
 
   const cardClass = `rounded-2xl p-5 flex flex-col gap-4 transition-colors ${
     isDark ? "bg-[#1a1a1a]" : "bg-white shadow-sm"
   }`;
+
+  function handleSend() {
+    if (!message.trim()) {
+      setSentMessage("Please write your issue before sending.");
+      setTimeout(() => setSentMessage(""), 2500);
+      return;
+    }
+    // TODO: replace with a real API call once the backend is ready
+    setSentMessage("Message sent! Our team will get back to you soon.");
+    setMessage("");
+    setTimeout(() => setSentMessage(""), 2500);
+  }
 
   return (
     <PageWrapper>
@@ -61,6 +75,8 @@ function Help() {
         <div className={cardClass}>
           <h2 className={`font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>Contact Support</h2>
           <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             placeholder="Describe your issue..."
             rows={4}
             className={`text-sm rounded-xl px-4 py-3 outline-none border transition-colors resize-none ${
@@ -69,9 +85,15 @@ function Help() {
                 : "bg-gray-50 text-gray-900 border-gray-200 focus:border-orange-500"
             }`}
           />
-          <button className="bg-orange-500 text-white text-sm rounded-xl py-2.5 hover:bg-orange-600 transition-colors w-fit px-6">
+          <button
+            onClick={handleSend}
+            className="bg-orange-500 text-white text-sm rounded-xl py-2.5 hover:bg-orange-600 transition-colors w-fit px-6"
+          >
             Send Message
           </button>
+          {sentMessage && (
+            <p className="text-sm text-green-500">{sentMessage}</p>
+          )}
         </div>
 
       </div>

@@ -12,6 +12,20 @@ function Settings() {
     orders: true,
   });
 
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [profileMessage, setProfileMessage] = useState("");
+
+  const [passwords, setPasswords] = useState({
+    current: "",
+    next: "",
+    confirm: "",
+  });
+  const [passwordMessage, setPasswordMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+
   const cardClass = `rounded-2xl p-5 flex flex-col gap-4 transition-colors ${
     isDark ? "bg-[#1a1a1a]" : "bg-white shadow-sm"
   }`;
@@ -21,6 +35,31 @@ function Settings() {
       ? "bg-[#252525] text-white border-white/5 focus:border-orange-500"
       : "bg-gray-50 text-gray-900 border-gray-200 focus:border-orange-500"
   }`;
+
+  function handleSaveProfile() {
+    // TODO: replace with a real API call once the backend is ready
+    setProfileMessage("Changes saved!");
+    setTimeout(() => setProfileMessage(""), 2500);
+  }
+
+  function handleUpdatePassword() {
+    if (!passwords.current || !passwords.next || !passwords.confirm) {
+      setPasswordMessage({ type: "error", text: "Please fill in all password fields." });
+      return;
+    }
+    if (passwords.next !== passwords.confirm) {
+      setPasswordMessage({ type: "error", text: "New passwords do not match." });
+      return;
+    }
+    if (passwords.next.length < 8) {
+      setPasswordMessage({ type: "error", text: "New password must be at least 8 characters." });
+      return;
+    }
+    // TODO: replace with a real API call once the backend is ready
+    setPasswordMessage({ type: "success", text: "Password updated!" });
+    setPasswords({ current: "", next: "", confirm: "" });
+    setTimeout(() => setPasswordMessage(null), 2500);
+  }
 
   return (
     <PageWrapper>
@@ -38,20 +77,32 @@ function Settings() {
             </div>
             <div className="flex flex-col gap-4">
               {[
-                { label: "Full Name", placeholder: "Mobina Violet" },
-                { label: "Email", placeholder: "mobina@email.com" },
-                { label: "Phone", placeholder: "+1 234 567 890" },
+                { key: "name" as const, label: "Full Name", placeholder: "Mobina Violet" },
+                { key: "email" as const, label: "Email", placeholder: "mobina@email.com" },
+                { key: "phone" as const, label: "Phone", placeholder: "+1 234 567 890" },
               ].map((field) => (
-                <div key={field.label} className="flex flex-col gap-1.5">
+                <div key={field.key} className="flex flex-col gap-1.5">
                   <label className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
                     {field.label}
                   </label>
-                  <input type="text" placeholder={field.placeholder} className={inputClass} />
+                  <input
+                    type="text"
+                    value={profile[field.key]}
+                    onChange={(e) => setProfile((prev) => ({ ...prev, [field.key]: e.target.value }))}
+                    placeholder={field.placeholder}
+                    className={inputClass}
+                  />
                 </div>
               ))}
-              <button className="bg-orange-500 text-white text-sm rounded-xl py-2.5 hover:bg-orange-600 transition-colors mt-2">
+              <button
+                onClick={handleSaveProfile}
+                className="bg-orange-500 text-white text-sm rounded-xl py-2.5 hover:bg-orange-600 transition-colors mt-2"
+              >
                 Save Changes
               </button>
+              {profileMessage && (
+                <p className="text-sm text-green-500">{profileMessage}</p>
+              )}
             </div>
           </div>
 
@@ -110,12 +161,38 @@ function Settings() {
                 Security
               </div>
               <div className="flex flex-col gap-3">
-                {["Current Password", "New Password", "Confirm Password"].map((label) => (
-                  <input key={label} type="password" placeholder={label} className={inputClass} />
-                ))}
-                <button className="bg-orange-500 text-white text-sm rounded-xl py-2.5 hover:bg-orange-600 transition-colors">
+                <input
+                  type="password"
+                  value={passwords.current}
+                  onChange={(e) => setPasswords((prev) => ({ ...prev, current: e.target.value }))}
+                  placeholder="Current Password"
+                  className={inputClass}
+                />
+                <input
+                  type="password"
+                  value={passwords.next}
+                  onChange={(e) => setPasswords((prev) => ({ ...prev, next: e.target.value }))}
+                  placeholder="New Password"
+                  className={inputClass}
+                />
+                <input
+                  type="password"
+                  value={passwords.confirm}
+                  onChange={(e) => setPasswords((prev) => ({ ...prev, confirm: e.target.value }))}
+                  placeholder="Confirm Password"
+                  className={inputClass}
+                />
+                <button
+                  onClick={handleUpdatePassword}
+                  className="bg-orange-500 text-white text-sm rounded-xl py-2.5 hover:bg-orange-600 transition-colors"
+                >
                   Update Password
                 </button>
+                {passwordMessage && (
+                  <p className={`text-sm ${passwordMessage.type === "error" ? "text-red-500" : "text-green-500"}`}>
+                    {passwordMessage.text}
+                  </p>
+                )}
               </div>
             </div>
 

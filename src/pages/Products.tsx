@@ -113,14 +113,19 @@ function Products() {
         </div>
 
         {/* Products */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div
+            className={`text-center py-20 ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+            Loading products...
+          </div>
+        ) : filtered.length === 0 ? (
           <div
             className={`text-center py-20 ${isDark ? "text-gray-500" : "text-gray-400"}`}>
             No products found
           </div>
-         
+
         ) : view === "grid" ? (
-      
+
           <div className="grid grid-cols-3 gap-4">
              {/*grid view */}
             {filtered.map((product) => (

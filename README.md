@@ -30,4 +30,4 @@ Highlights
 
 
 ## 🎬 Live Demo
-🔗 https://6a8eb4cd1e03395b4d230535--mydashboard-projects.netlify.app/
+🔗 https://mydashboard-projects.netlify.app/

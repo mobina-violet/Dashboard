@@ -27,3 +27,7 @@ Highlights
 - Type-safe interfaces and models
 - Simulated API integration
 - Modern and scalable frontend structure
+
+
+## 🎬 Live Demo
+🔗 https://6a8eb4cd1e03395b4d230535--mydashboard-projects.netlify.app/
